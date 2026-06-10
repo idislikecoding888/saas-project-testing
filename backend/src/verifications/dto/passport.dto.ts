@@ -1,3 +1,4 @@
 export class PassportDto {
-  passportNumber: string;
+  fileNumber: string;
+  dob: string;
 }

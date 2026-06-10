@@ -37,12 +37,17 @@ export class VerificationsService {
       );
     }
 
+    console.log('SERVICE:', serviceName);
+    console.log('ENDPOINT:', endpoint);
+
     const pricing =
       await this.prisma.pricing.findUnique({
         where: {
           serviceName,
         },
       });
+
+    console.log('PRICING:', pricing);
 
     if (!pricing) {
       throw new BadRequestException(
@@ -51,6 +56,13 @@ export class VerificationsService {
     }
 
     try {
+      console.log(
+        'NEROTIX URL:',
+        `${process.env.NEROTIX_BASE_URL}${endpoint}`,
+      );
+
+      console.log('PAYLOAD:', payload);
+
       const response =
         await firstValueFrom(
           this.http.post(
@@ -64,6 +76,11 @@ export class VerificationsService {
             },
           ),
         );
+
+      console.log(
+        'NEROTIX SUCCESS:',
+        response.data,
+      );
 
       await this.walletService.debitWallet(
         key.userId,
@@ -84,20 +101,32 @@ export class VerificationsService {
 
       return response.data;
     } catch (error: any) {
-      console.log('========== NEROTIX ERROR ==========');
       console.log(
-        'Status:',
+        '========== NEROTIX ERROR ==========',
+      );
+      console.log(
+        'SERVICE:',
+        serviceName,
+      );
+      console.log(
+        'ENDPOINT:',
+        endpoint,
+      );
+      console.log(
+        'STATUS:',
         error?.response?.status,
       );
       console.log(
-        'Response:',
+        'RESPONSE:',
         error?.response?.data,
       );
       console.log(
-        'Message:',
+        'MESSAGE:',
         error?.message,
       );
-      console.log('===================================');
+      console.log(
+        '===================================',
+      );
 
       await this.prisma.verificationRequest.create({
         data: {

@@ -1,3 +1,4 @@
 export class DigiLockerDto {
-  aadhaarNumber: string;
+  document_requested: string[];
+  user_flow: string;
 }

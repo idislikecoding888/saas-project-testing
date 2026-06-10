@@ -23,6 +23,26 @@ export class ApiKeysController {
     );
   }
 
+  @Post('regenerate/:userId')
+  regenerateKey(
+    @Param('userId')
+    userId: string,
+  ) {
+    return this.apiKeysService.regenerateApiKey(
+      userId,
+    );
+  }
+
+  @Get('usage/:userId')
+  getUsageLogs(
+    @Param('userId')
+    userId: string,
+  ) {
+    return this.apiKeysService.getUsageLogs(
+      userId,
+    );
+  }
+
   @Get(':userId')
   getKeys(
     @Param('userId')

@@ -23,6 +23,11 @@ export class PricingController {
     return this.pricingService.getAllPricing();
   }
 
+  @Get('developer/docs')
+  developerDocs() {
+    return this.pricingService.getDeveloperDocs();
+  }
+
   @UseGuards(PermissionGuard)
   @Permission('MANAGE_PRICING')
   @Patch(':id')

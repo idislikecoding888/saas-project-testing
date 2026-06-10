@@ -1,3 +1,3 @@
 export class GstDto {
-  gstNumber: string;
+  gstinNumber: string;
 }

@@ -1,26 +1,53 @@
-# SaaS Document Verification Platform Backend
+# SaaS Document Verification Platform
 
-A production-ready NestJS backend for a SaaS-based document verification platform with wallet management, API key authentication, role-based access control, staff management, pricing management, support tickets, Razorpay payments, and Nerotix document verification integration.
+Production-ready SaaS backend for KYC, document verification, business verification, telecom intelligence, vehicle intelligence, wallet management, API key authentication, role-based access control (RBAC), staff management, pricing management, support tickets, webhooks, analytics, and Razorpay wallet top-ups.
+
+Built using NestJS, Prisma, PostgreSQL, and Nerotix APIs.
 
 ---
 
-# Features
+# Overview
+
+This platform allows businesses, developers, fintech companies, HR platforms, logistics companies, and verification providers to perform real-time identity verification and business verification through a single API.
+
+The system provides:
+
+* User Authentication
+* Wallet-Based Billing
+* API Key Management
+* Verification History
+* Usage Analytics
+* Pricing Management
+* Staff Permissions
+* Admin Dashboard
+* Webhook Support
+* Razorpay Wallet Funding
+* Nerotix API Integrations
+
+---
+
+# Core Features
 
 ## Authentication & Users
+
+Features:
 
 * User Registration
 * User Login
 * JWT Authentication
 * Customer Accounts
 * Staff Accounts
-* Super Admin Access
+* Super Admin Accounts
 
-## Role-Based Access Control (RBAC)
+Roles:
 
-* Permission Management
-* Staff Permissions
-* Protected Routes
-* Granular Access Control
+* CUSTOMER
+* STAFF
+* SUPER_ADMIN
+
+---
+
+## Role Based Access Control (RBAC)
 
 Supported Permissions:
 
@@ -33,90 +60,256 @@ Supported Permissions:
 * MANAGE_API_KEYS
 * REFUND_WALLET
 
+Features:
+
+* Permission Assignment
+* Staff Access Control
+* Protected Endpoints
+* Multi-Level Administration
+
 ---
 
 # Wallet System
 
-Each customer receives a wallet.
+Every customer receives a wallet.
 
 Features:
 
+* Wallet Creation
 * Wallet Balance Tracking
-* Credit Transactions
-* Debit Transactions
+* Wallet Credits
+* Wallet Debits
 * Transaction History
 * Revenue Analytics
+* Verification Cost Deduction
 
-Minimum wallet balance supported.
+Verification charges are automatically deducted from wallet balance.
 
 ---
 
 # API Key System
 
-Every customer can generate API keys.
+Every customer can create and manage API keys.
 
 Features:
 
+* Generate API Keys
+* Regenerate API Keys
+* Disable Old API Keys
 * Multiple API Keys
-* Active/Inactive Keys
 * API Key Validation
-* Verification Usage Tracking
+* Active / Inactive Status
+* API Usage Tracking
+* Verification Usage Logs
 
-API Keys are required for verification requests.
+Endpoints:
+
+POST /api-keys/:userId
+
+GET /api-keys/:userId
+
+POST /api-keys/regenerate/:apiKeyId
+
+GET /api-keys/usage/:apiKeyId
 
 ---
 
-# Document Verification Services
+# Developer Portal
 
-Supported Services:
+Provides API documentation directly from backend.
 
-1. PAN Verification
-2. GST Verification
-3. Aadhaar OTP
-4. DigiLocker Verification
-5. Driving License Verification
-6. Passport Verification
-7. Voter ID Verification
+Endpoint:
 
-Verification requests:
+GET /pricing/developer/docs
 
-* Deduct wallet balance automatically
-* Create transaction records
-* Store verification history
-* Store API responses
-* Track success/failure status
+Returns:
 
-Provider:
+* Service Name
+* Endpoint
+* Current Price
 
-* Nerotix API
+Useful for:
+
+* SDK Builders
+* API Consumers
+* Integration Partners
+
+---
+
+# Verification Services
+
+Integrated with Nerotix APIs.
+
+Currently Supported Services:
+
+## Identity Verification
+
+✓ Aadhaar OTP
+
+✓ DigiLocker Aadhaar
+
+✓ PAN Verification
+
+✓ PAN 360
+
+✓ Driving License
+
+✓ Passport
+
+✓ Voter ID
+
+---
+
+## Business Verification
+
+✓ GSTIN Verification
+
+✓ PAN To GSTIN
+
+✓ CIN / MCA Lookup
+
+✓ Udyam Verification
+
+✓ PAN To Udyam
+
+---
+
+## Banking Verification
+
+✓ Penny Drop
+
+---
+
+## Face Intelligence
+
+✓ Face Check
+
+✓ Face Liveliness Check
+
+✓ Name Match
+
+---
+
+## Location Intelligence
+
+✓ Reverse Geocoding
+
+---
+
+## Vehicle Intelligence
+
+✓ Vehicle RC
+
+---
+
+## Employment Verification
+
+✓ Employment 360
+
+---
+
+## Telecom Intelligence
+
+✓ Number Lookup
+
+---
+
+# Verification Flow
+
+Every verification follows the same workflow:
+
+1. Validate API Key
+2. Verify Wallet Balance
+3. Fetch Pricing
+4. Deduct Wallet Balance
+5. Call Nerotix API
+6. Store Response
+7. Create Verification Record
+8. Create Transaction Record
+9. Return API Response
+
+---
+
+# Verification History
+
+Every verification request is stored.
+
+Stored Data:
+
+* User ID
+* Service Name
+* Request Payload
+* Response Payload
+* Amount Charged
+* Status
+* Error Messages
+* Timestamp
+
+Endpoint:
+
+GET /verifications/history/:userId
 
 ---
 
 # Pricing Management
 
-Each service has configurable pricing.
-
-Supported:
-
-* PAN_VERIFY
-* GST_VERIFY
-* AADHAAR_OTP
-* DIGILOCKER
-* DRIVING_LICENSE
-* PASSPORT
-* VOTER_ID
-
-Super Admin can modify pricing dynamically.
-
-Customers can view pricing publicly.
-
----
-
-# Support System
+Every service has configurable pricing.
 
 Features:
 
-* Create Support Tickets
+* Dynamic Pricing
+* Public Pricing Endpoint
+* Admin Pricing Controls
+* Active/Inactive Pricing
+
+Endpoints:
+
+GET /pricing
+
+PATCH /pricing/:id
+
+Supported Services:
+
+* AADHAAR_OTP
+* DIGILOCKER
+* PAN_VERIFY
+* PAN_360
+* DRIVING_LICENSE
+* PASSPORT
+* VOTER_ID
+* GST_VERIFY
+* PAN_TO_GSTIN
+* CIN_LOOKUP
+* UDYAM
+* PAN_TO_UDYAM
+* PENNY_DROP
+* FACE_CHECK
+* FACE_LIVELINESS
+* NAME_MATCH
+* REVERSE_GEOCODING
+* VEHICLE_RC
+* EMPLOYMENT_360
+* NUMBER_LOOKUP
+
+---
+
+# Staff Management
+
+Features:
+
+* Create Staff Members
+* Assign Permissions
+* List Staff Members
+* View Staff Permissions
+* Revoke Permissions
+
+---
+
+# Support Ticket System
+
+Features:
+
+* Create Ticket
 * View User Tickets
 * View All Tickets
 * Update Ticket Status
@@ -131,31 +324,18 @@ Statuses:
 
 # Admin Dashboard
 
-Admin Analytics:
+Provides platform-wide analytics.
+
+Metrics:
 
 * Total Users
 * Total Staff
 * Total Transactions
 * Active API Keys
-* Total Revenue
+* Wallet Revenue
+* Verification Revenue
 * Verification Statistics
-
-Revenue Analytics:
-
-* Total Credits
-* Total Debits
-* Profit
-
----
-
-# Staff Management
-
-Features:
-
-* Create Staff Accounts
-* Assign Permissions
-* List Staff Members
-* View Assigned Permissions
+* User Growth
 
 ---
 
@@ -164,23 +344,28 @@ Features:
 Features:
 
 * Create Webhooks
-* Store Webhook URLs
-* List User Webhooks
+* Enable Webhooks
+* Disable Webhooks
+* Delete Webhooks
+* Retrieve User Webhooks
 
 ---
 
-# Payment Gateway
+# Razorpay Integration
 
-Integrated with:
-
-* Razorpay
-
-Supported:
+Supported Features:
 
 * Create Orders
 * Wallet Topups
+* Payment Verification
 
-Webhook support available.
+Environment Variables:
+
+RAZORPAY_KEY_ID
+
+RAZORPAY_KEY_SECRET
+
+RAZORPAY_WEBHOOK_SECRET
 
 ---
 
@@ -192,18 +377,16 @@ GET /health
 
 Response:
 
-```json
 {
-  "status": "ok",
-  "service": "saas-backend"
+"status": "ok",
+"service": "saas-backend"
 }
-```
 
 ---
 
 # Technology Stack
 
-Backend Framework:
+Backend:
 
 * NestJS
 * TypeScript
@@ -222,7 +405,7 @@ Payments:
 
 * Razorpay
 
-External Verification:
+Verification Provider:
 
 * Nerotix API
 
@@ -230,35 +413,63 @@ Security:
 
 * Helmet
 * ValidationPipe
-* RBAC Permission Guards
+* Permission Guards
 
 ---
 
 # Project Structure
 
-```text
-src
-├── admin
-├── api-keys
-├── auth
-├── common
-├── config
-├── dashboard
-├── permissions
-├── pricing
-├── prisma
-├── razorpay
-├── staff
-├── support
-├── transactions
-├── users
-├── verifications
-├── wallet
-├── webhooks
-├── health
-├── app.module.ts
-└── main.ts
-```
+saas-project
+
+├── backend
+
+│ ├── prisma
+
+│ ├── src
+
+│ │ ├── admin
+
+│ │ ├── api-keys
+
+│ │ ├── auth
+
+│ │ ├── dashboard
+
+│ │ ├── permissions
+
+│ │ ├── pricing
+
+│ │ ├── razorpay
+
+│ │ ├── staff
+
+│ │ ├── support
+
+│ │ ├── transactions
+
+│ │ ├── users
+
+│ │ ├── verifications
+
+│ │ ├── wallet
+
+│ │ ├── webhooks
+
+│ │ └── health
+
+│ ├── Dockerfile
+
+│ └── package.json
+
+│
+
+├── docker-compose.yml
+
+├── README.md
+
+├── .env.example
+
+└── .gitignore
 
 ---
 
@@ -268,48 +479,50 @@ Install:
 
 * Node.js 20+
 * PostgreSQL 16+
-* Docker Desktop (optional)
 * Git
+* Docker Desktop (Optional)
 
 ---
 
-# Installation
+# Quick Start
 
-Clone repository:
+Clone Repository:
 
-```bash
 git clone <repository-url>
+
+cd saas-project
+
 cd backend
-```
 
-Install dependencies:
+Install Dependencies:
 
-```bash
 npm install
-```
+
+Create Environment File:
+
+cp ../.env.example .env
+
+Update .env values.
 
 ---
 
 # Environment Variables
 
-Create a `.env` file in project root.
-
-Example:
-
-```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/saasdb"
 
-JWT_SECRET=your_jwt_secret
+JWT_SECRET=your_secret
 
 PORT=3000
 
 NEROTIX_BASE_URL=https://api.nerofy.in/api/v1
+
 NEROTIX_TOKEN=your_nerotix_token
 
-RAZORPAY_KEY_ID=your_razorpay_key_id
-RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+RAZORPAY_KEY_ID=your_key
+
+RAZORPAY_KEY_SECRET=your_secret
+
 RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
-```
 
 ---
 
@@ -317,143 +530,111 @@ RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
 
 Generate Prisma Client:
 
-```bash
 npx prisma generate
-```
 
-Push schema:
+Apply Database Schema:
 
-```bash
 npx prisma db push
-```
 
 Open Prisma Studio:
 
-```bash
 npx prisma studio
-```
 
 ---
 
-# Running The Application
+# Running Locally
 
 Development:
 
-```bash
 npm run start:dev
-```
 
 Production Build:
 
-```bash
 npm run build
-```
 
 Run Production:
 
-```bash
 npm run start:prod
-```
 
 ---
 
-# API Testing
+# Docker
 
-Health Check:
+Start:
 
-```http
-GET /health
-```
+docker compose up --build
 
-Pricing:
+Stop:
 
-```http
-GET /pricing
-```
-
-Dashboard:
-
-```http
-GET /dashboard/:userId
-```
-
-Admin:
-
-```http
-GET /admin/overview
-GET /admin/revenue
-GET /admin/transactions
-GET /admin/verifications
-```
-
-Support:
-
-```http
-POST /support/create
-GET /support/all
-```
-
-Webhooks:
-
-```http
-POST /webhooks/create
-GET /webhooks/user/:userId
-```
-
-Verifications:
-
-```http
-POST /verifications/pan
-POST /verifications/gst
-POST /verifications/aadhaar/send-otp
-POST /verifications/digilocker
-POST /verifications/driving-license
-POST /verifications/passport
-POST /verifications/voter-id
-```
+docker compose down
 
 ---
 
-# Required Headers
+# Security
 
-Verification APIs require:
+Verification Endpoints require:
 
-```http
 x-api-key: YOUR_API_KEY
-```
 
-Permission-protected routes require:
+Permission Protected Endpoints require:
 
-```http
 user-id: STAFF_OR_ADMIN_ID
-```
+
+JWT Authentication required for protected routes.
 
 ---
 
 # Development Workflow
 
 1. Configure PostgreSQL
-2. Configure .env
-3. Run Prisma Generate
-4. Run Prisma DB Push
-5. Start NestJS Server
-6. Open Prisma Studio
-7. Create Users
-8. Create API Keys
+2. Configure Environment Variables
+3. Generate Prisma Client
+4. Push Database Schema
+5. Start Backend
+6. Register User
+7. Generate API Key
+8. Fund Wallet
 9. Configure Pricing
-10. Test Verification APIs
+10. Start Using Verification APIs
 
 ---
 
-# Production Checklist
+# Current Platform Status
 
-* Configure PostgreSQL
-* Configure Nerotix Credentials
-* Configure Razorpay Credentials
-* Configure Razorpay Webhook Secret
-* Enable HTTPS
-* Deploy Backend
-* Configure Reverse Proxy
-* Configure Monitoring
+Completed:
 
----
+✓ Authentication
+
+✓ RBAC
+
+✓ Wallet System
+
+✓ Transactions
+
+✓ Pricing Management
+
+✓ API Keys
+
+✓ API Key Regeneration
+
+✓ API Usage Analytics
+
+✓ Developer Documentation
+
+✓ Verification History
+
+✓ Support Tickets
+
+✓ Staff Management
+
+✓ Admin Dashboard
+
+✓ Webhooks
+
+✓ Razorpay Orders
+
+✓ 20 Verification Services
+
+✓ Nerotix Integration
+
+Production Ready Core Backend
