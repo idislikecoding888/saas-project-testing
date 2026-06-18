@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { login } from "@/lib/auth/auth";
+import { useEffect, useState } from "react";
 import {
   Mail,
   Lock,
@@ -24,12 +25,37 @@ export default function LoginForm() {
   const [error, setError] =
     useState("");
 
+  useEffect(() => {
+    const token =
+      localStorage.getItem(
+        "idproofpro_token"
+      );
+
+    const role =
+      localStorage.getItem(
+        "idproofpro_role"
+      );
+
+    if (!token) return;
+
+    if (role === "admin") {
+      router.push("/admin");
+      return;
+    }
+
+    if (role === "staff") {
+      router.push("/staff");
+      return;
+    }
+
+    router.push("/developer");
+  }, [router]);
+
   const validate = () => {
     if (!email.includes("@")) {
       setError(
         "Please enter a valid email"
       );
-
       return false;
     }
 
@@ -37,7 +63,6 @@ export default function LoginForm() {
       setError(
         "Password is required"
       );
-
       return false;
     }
 
@@ -45,57 +70,75 @@ export default function LoginForm() {
   };
 
   const handleSubmit = async (
-    e: React.FormEvent
-  ) => {
-    e.preventDefault();
+  e: React.FormEvent
+) => {
+  e.preventDefault();
 
-    setError("");
+  if (!validate()) {
+    return;
+  }
 
-    if (!validate()) return;
+  setLoading(true);
+  setError("");
 
-    try {
-      setLoading(true);
+  try {
+    const lower =
+      email.toLowerCase();
 
-      /*
-      BACKEND INTEGRATION HERE
+    let role = "developer";
 
-      const response = await axios.post(
-      "/auth/login",
-      {
-        email,
-        password
-      });
-
-      const role =
-      response.data.role;
-      */
-
-      await new Promise((r) =>
-        setTimeout(r, 1500)
-      );
-
-      const role = "developer";
-
-      if (role === "developer") {
-        router.push("/developer");
-      }
-
-      if (role === "staff") {
-        router.push("/staff");
-      }
-
-      if (role === "superadmin") {
-        router.push("/admin");
-      }
-    } catch {
-      setError(
-        "Invalid credentials"
-      );
-    } finally {
-      setLoading(false);
+    if (
+      lower.includes("admin")
+    ) {
+      role = "admin";
     }
-  };
 
+    if (
+      lower.includes("staff")
+    ) {
+      role = "staff";
+    }
+
+    localStorage.setItem(
+      "idproofpro_token",
+      "demo-token"
+    );
+
+    localStorage.setItem(
+      "idproofpro_role",
+      role
+    );
+
+    console.log(
+      "LOGIN SUCCESS",
+      role
+    );
+
+    if (role === "admin") {
+      window.location.href =
+        "/admin";
+      return;
+    }
+
+    if (role === "staff") {
+      window.location.href =
+        "/staff";
+      return;
+    }
+
+    window.location.href =
+      "/developer";
+  } catch (err) {
+    console.error(err);
+
+    setError(
+      "Login failed. Please try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+//console.log("LOGIN FORM RENDERED");
   return (
     <form
       onSubmit={handleSubmit}
@@ -152,6 +195,7 @@ export default function LoginForm() {
             bg-transparent
             outline-none
             placeholder:text-slate-600
+            text-white
           "
           />
         </div>
@@ -165,7 +209,7 @@ export default function LoginForm() {
             uppercase
             tracking-[0.25em]
             text-slate-500
-          "
+            "
           >
             Password
           </label>
@@ -175,7 +219,7 @@ export default function LoginForm() {
             className="
             text-sm
             text-blue-400
-          "
+            "
           >
             Forgot Password?
           </button>
@@ -218,7 +262,8 @@ export default function LoginForm() {
             bg-transparent
             outline-none
             placeholder:text-slate-600
-          "
+            text-white
+            "
           />
         </div>
       </div>
@@ -233,7 +278,7 @@ export default function LoginForm() {
           p-3
           text-sm
           text-red-400
-        "
+          "
         >
           {error}
         </div>
@@ -248,25 +293,18 @@ export default function LoginForm() {
         items-center
         justify-center
         gap-3
-
         rounded-xl
-
         bg-gradient-to-r
         from-[#2563eb]
         to-[#3b82f6]
-
         py-4
-
         text-lg
         font-medium
-
         shadow-[0_10px_40px_rgba(37,99,235,0.25)]
-
         transition-all
         hover:scale-[1.01]
-
         disabled:opacity-60
-      "
+        "
       >
         {loading ? (
           <>
@@ -291,7 +329,7 @@ export default function LoginForm() {
           text-sm
           text-slate-500
           hover:text-slate-300
-        "
+          "
         >
           Need access? Contact administrator
         </button>

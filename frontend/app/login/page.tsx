@@ -1,10 +1,7 @@
 "use client";
-
+import LoginForm from "@/components/auth/login-form";
 import {
   Shield,
-  Mail,
-  Lock,
-  ArrowRight,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -148,137 +145,7 @@ export default function LoginPage() {
               </p>
             </div>
 
-            <form className="mt-8 space-y-5">
-
-              {/* EMAIL */}
-
-              <div>
-                <label className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-500">
-                  Work Email
-                </label>
-
-                <div
-                  className="
-                  flex
-                  items-center
-                  gap-3
-                  rounded-xl
-                  border
-                  border-slate-800
-                  bg-[#020d1b]
-                  px-4
-                  py-3.5
-                "
-                >
-                  <Mail
-                    size={18}
-                    className="text-slate-500"
-                  />
-
-                  <input
-                    type="email"
-                    placeholder="name@company.com"
-                    className="
-                    w-full
-                    bg-transparent
-                    outline-none
-                    placeholder:text-slate-600
-                  "
-                  />
-                </div>
-              </div>
-
-              {/* PASSWORD */}
-
-              <div>
-                <div className="mb-2 flex justify-between">
-                  <label className="text-xs uppercase tracking-[0.25em] text-slate-500">
-                    Password
-                  </label>
-
-                  <button
-                    type="button"
-                    className="
-                    text-sm
-                    text-blue-400
-                    hover:text-blue-300
-                  "
-                  >
-                    Forgot Password?
-                  </button>
-                </div>
-
-                <div
-                  className="
-                  flex
-                  items-center
-                  gap-3
-                  rounded-xl
-                  border
-                  border-slate-800
-                  bg-[#020d1b]
-                  px-4
-                  py-4
-                "
-                >
-                  <Lock
-                    size={18}
-                    className="text-slate-500"
-                  />
-
-                  <input
-                    type="password"
-                    placeholder="••••••••"
-                    className="
-                    w-full
-                    bg-transparent
-                    outline-none
-                    placeholder:text-slate-600
-                  "
-                  />
-                </div>
-              </div>
-
-              <div className="text-center">
-  <button
-    type="button"
-    className="
-    text-sm
-    text-slate-500
-    hover:text-slate-300
-    transition-colors
-    "
-  >
-    Need access? Contact administrator
-  </button>
-</div>
-
-              <button
-                className="
-                flex
-                w-full
-                items-center
-                justify-center
-                gap-3
-                rounded-xl
-                bg-gradient-to-r
-from-[#2563eb]
-to-[#3b82f6]
-shadow-[0_10px_40px_rgba(37,99,235,0.25)]
-                py-4
-                text-lg
-                font-medium
-                text-white
-                shadow-[0_0_30px_rgba(37,99,235,0.20)]
-                transition-all
-                hover:bg-[#3b82f6]
-              "
-              >
-                Sign in to Console
-
-                <ArrowRight size={18} />
-              </button>
-            </form>
+            <LoginForm />
           </div>
         </div>
       </div>
