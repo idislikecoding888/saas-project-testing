@@ -25,22 +25,6 @@ export default function LoginPage() {
         "
         >
           <div className="max-w-[460px]">
-  <div
-    className="
-    mb-12
-    flex
-    h-14
-    w-14
-    items-center
-    justify-center
-    rounded-2xl
-    border
-    border-slate-800
-    bg-[#08172b]
-    "
-  >
-    <Shield size={26} />
-  </div>
 
   <h1
     className="
@@ -50,7 +34,11 @@ export default function LoginPage() {
     text-white
     "
   >
-    IDProofPro
+    <img
+  src="/logo-white.png"
+  alt="IDProofPro"
+  className="w-[680px]"
+/>
   </h1>
 
   <p

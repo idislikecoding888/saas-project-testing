@@ -100,14 +100,17 @@ export default function LoginForm() {
     }
 
     localStorage.setItem(
-      "idproofpro_token",
-      "demo-token"
-    );
+  "idproofpro_token",
+  "demo-token"
+);
 
-    localStorage.setItem(
-      "idproofpro_role",
-      role
-    );
+localStorage.setItem(
+  "idproofpro_role",
+  role
+);
+
+document.cookie =
+  "token=demo-token; path=/";
 
     console.log(
       "LOGIN SUCCESS",

@@ -2,25 +2,44 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(
-  request: NextRequest
+request: NextRequest
 ) {
-  const token =
-    request.cookies.get("token");
+const token =
+request.cookies.get("token");
 
-  if (
-    !token &&
-    request.nextUrl.pathname.startsWith(
-      "/developer"
-    )
-  ) {
-    return NextResponse.redirect(
-      new URL("/login", request.url)
-    );
-  }
+const pathname =
+request.nextUrl.pathname;
 
-  return NextResponse.next();
+const protectedRoutes = [
+"/developer",
+"/admin",
+"/staff",
+];
+
+const isProtected =
+protectedRoutes.some((route) =>
+pathname.startsWith(route)
+);
+
+if (
+isProtected &&
+!token
+) {
+return NextResponse.redirect(
+new URL(
+"/login",
+request.url
+)
+);
+}
+
+return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/developer/:path*"],
+matcher: [
+"/developer/:path*",
+"/admin/:path*",
+"/staff/:path*",
+],
 };

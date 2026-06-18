@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function HomePage() {
+export default function NotFound() {
   return (
     <main
       className="
@@ -20,7 +20,7 @@ export default function HomePage() {
       <img
   src="/logo-gradient.png"
   alt="IDProofPro"
-  className="w-[820px]"
+  className="w-[660px]"
 />
 
       <h1
@@ -32,23 +32,25 @@ export default function HomePage() {
         font-bold
         "
       >
-        IDProofPro
+        404
       </h1>
 
       <p
         className="
         mt-4
 
+        text-xl
+
         text-slate-400
         "
       >
-        Enterprise Identity Infrastructure
+        Even our KYC engine couldn't verify this page.
       </p>
 
       <Link
-        href="/login"
+        href="/"
         className="
-        mt-10
+        mt-8
 
         rounded-xl
 
@@ -56,13 +58,9 @@ export default function HomePage() {
 
         px-8
         py-4
-
-        font-medium
-
-        hover:bg-blue-500
         "
       >
-        Access Console
+        Return Home
       </Link>
     </main>
   );

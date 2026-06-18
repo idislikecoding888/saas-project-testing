@@ -21,28 +21,29 @@ export default function MetricCard({
 }: MetricCardProps) {
   return (
     <div
-  className="
-  bg-[var(--surface)]
-  border
-  border-[var(--border)]
+      className="
+        bg-[var(--surface)]
+        border
+        border-[var(--border)]
 
-  rounded-[9px]
+        rounded-md
 
-  p-8
+        p-8
 
-  cursor-pointer
+        cursor-pointer
 
-  transition-all
+        transition-all
 
-  duration-200
+        duration-200
 
-  hover:bg-[var(--hover-surface)]
+        hover:bg-[var(--hover-surface)]
 
-  hover:border-blue-500/30
+        hover:border-blue-500/30
 
-  shadow-[0_24px_80px_rgba(15,23,42,0.08)]
-  "
->
+        shadow-[0_24px_80px_rgba(15,23,42,0.08)]
+        h-full
+      "
+    >
       <div className="flex items-start justify-between gap-4">
         <p
           className="

@@ -2,11 +2,13 @@
 
 interface Props {
   open: boolean;
+  service: any;
   onClose: () => void;
 }
 
-export default function CreateStaffModal({
+export default function EditPricingModal({
   open,
+  service,
   onClose,
 }: Props) {
   if (!open) return null;
@@ -22,14 +24,13 @@ export default function CreateStaffModal({
       items-center
       justify-center
 
-      bg-black/70
-      backdrop-blur-sm
-      "
+      bg-black/60
+    "
     >
       <div
         className="
         w-full
-        max-w-xl
+        max-w-lg
 
         rounded-3xl
 
@@ -39,36 +40,35 @@ export default function CreateStaffModal({
         bg-[#08172b]
 
         p-8
-        "
+      "
       >
         <h2 className="text-2xl font-semibold">
-          Create Staff
+          Edit Pricing
         </h2>
 
-        <p className="mt-2 text-slate-400">
-          Add a new staff member.
-        </p>
+        <div className="mt-8 space-y-4">
 
-        <div className="mt-8 grid grid-cols-2 gap-4">
           <input
-            placeholder="First Name"
-            className="rounded-xl bg-[#020d1b] p-4"
+            value={service?.name || ""}
+            disabled
+            className="
+            w-full
+            rounded-xl
+            bg-[#020d1b]
+            p-4
+          "
           />
 
           <input
-            placeholder="Last Name"
-            className="rounded-xl bg-[#020d1b] p-4"
+            placeholder={service?.price || ""}
+            className="
+            w-full
+            rounded-xl
+            bg-[#020d1b]
+            p-4
+          "
           />
 
-          <input
-            placeholder="Email"
-            className="col-span-2 rounded-xl bg-[#020d1b] p-4"
-          />
-
-          <input
-            placeholder="Password"
-            className="col-span-2 rounded-xl bg-[#020d1b] p-4"
-          />
         </div>
 
         <div className="mt-8 flex justify-end gap-3">
@@ -80,7 +80,7 @@ export default function CreateStaffModal({
             border-slate-700
             px-4
             py-3
-            "
+          "
           >
             Cancel
           </button>
@@ -91,9 +91,9 @@ export default function CreateStaffModal({
             bg-blue-600
             px-4
             py-3
-            "
+          "
           >
-            Create Staff
+            Save
           </button>
         </div>
       </div>
