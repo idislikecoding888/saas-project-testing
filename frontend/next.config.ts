@@ -1,7 +1,16 @@
+// frontend/next.config.ts  (replace entire file)
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: `${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000"}/:path*`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
