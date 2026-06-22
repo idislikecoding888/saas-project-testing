@@ -1,4 +1,8 @@
-import { ArrowUpRight } from "lucide-react";
+import {
+  useState,
+} from "react";
+
+import VerifyModal from "./verify-modal";
 
 type ServiceCardProps = {
   name: string;
@@ -15,6 +19,8 @@ export default function ServiceCard({
   price,
   icon,
 }: ServiceCardProps) {
+  const [openModal, setOpenModal] =
+  useState(false);
   const badgeColor = {
     active: "bg-emerald-500",
     live: "bg-blue-500",
@@ -106,19 +112,37 @@ hover:shadow-[0_0_16px_rgba(59,130,246,0.15)]
           </button>
 
           <button
-            className="
-            flex-1 rounded-md
-            bg-[#0061FF]
-            py-2 text-sm font-medium
-            text-white
-            hover:brightness-110
-hover:shadow-[0_0_18px_rgba(37,99,235,0.25)]
-            "
-          >
-            Try API
-          </button>
+  onClick={() =>
+    setOpenModal(true)
+  }
+  className="
+  flex-1
+  rounded-md
+
+  bg-[#0061FF]
+
+  py-2
+
+  text-sm
+  font-medium
+
+  text-white
+
+  hover:brightness-110
+  hover:shadow-[0_0_18px_rgba(37,99,235,0.25)]
+  "
+>
+  Try API
+</button>
         </div>
       </div>
+      <VerifyModal
+  open={openModal}
+  onClose={() =>
+    setOpenModal(false)
+  }
+  serviceName={name}
+/>
     </div>
   );
 }
