@@ -3,15 +3,11 @@ import {
   ShieldCheck,
   KeyRound,
   Settings,
-  FileText,
-  MessageSquare,
   CreditCard,
   Users,
   BadgeIndianRupee,
   LifeBuoy,
-  Wallet,
-  History,
-  Webhook,
+  MessageSquare,
 } from "lucide-react";
 
 export const developerNavigation = [
@@ -31,29 +27,9 @@ export const developerNavigation = [
     icon: KeyRound,
   },
   {
-    title: "Verification History",
-    href: "/developer/history",
-    icon: History,
-  },
-  {
-    title: "Wallet",
-    href: "/developer/wallet",
-    icon: Wallet,
-  },
-  {
-    title: "Webhooks",
-    href: "/developer/webhooks",
-    icon: Webhook,
-  },
-  {
     title: "Settings",
     href: "/developer/settings",
     icon: Settings,
-  },
-  {
-    title: "Documentation",
-    href: "/developer/docs",
-    icon: FileText,
   },
 ];
 

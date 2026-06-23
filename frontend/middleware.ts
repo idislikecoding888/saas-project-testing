@@ -9,7 +9,7 @@ function homeForRole(role: string | undefined | null) {
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
-  const role = request.cookies.get("role")?.value;
+  const role = request.cookies.get("role")?.value ?? "developer";
 
   const pathname = request.nextUrl.pathname;
 
@@ -26,15 +26,15 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(homeForRole(role), request.url));
   }
 
-  if (pathname.startsWith("/admin") && role && role !== "admin") {
+  if (pathname.startsWith("/admin") && role !== "admin") {
     return NextResponse.redirect(new URL(homeForRole(role), request.url));
   }
 
-  if (pathname.startsWith("/staff") && role && role !== "staff") {
+  if (pathname.startsWith("/staff") && role !== "staff") {
     return NextResponse.redirect(new URL(homeForRole(role), request.url));
   }
 
-  if (pathname.startsWith("/developer") && role && role !== "developer") {
+  if (pathname.startsWith("/developer") && role !== "developer") {
     return NextResponse.redirect(new URL(homeForRole(role), request.url));
   }
 

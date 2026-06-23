@@ -1,7 +1,19 @@
-export default function WalletStats() {
+interface WalletStatsProps {
+  todaySpend: number;
+  monthlySpend: number;
+  averageDaily: number;
+}
+
+export default function WalletStats({
+  todaySpend,
+  monthlySpend,
+  averageDaily,
+}: WalletStatsProps) {
+  const fmt = (value: number) =>
+    `₹${new Intl.NumberFormat("en-IN").format(Number(value || 0))}`;
+
   return (
     <div className="space-y-4">
-
       <div
         className="
         rounded-xl
@@ -15,7 +27,7 @@ export default function WalletStats() {
         </p>
 
         <h3 className="mt-2 text-3xl font-semibold text-white">
-          ₹342
+          {fmt(todaySpend)}
         </h3>
       </div>
 
@@ -32,7 +44,7 @@ export default function WalletStats() {
         </p>
 
         <h3 className="mt-2 text-3xl font-semibold text-white">
-          ₹14,500
+          {fmt(monthlySpend)}
         </h3>
       </div>
 
@@ -49,10 +61,9 @@ export default function WalletStats() {
         </p>
 
         <h3 className="mt-2 text-3xl font-semibold text-white">
-          ₹483
+          {fmt(averageDaily)}
         </h3>
       </div>
-
     </div>
   );
 }

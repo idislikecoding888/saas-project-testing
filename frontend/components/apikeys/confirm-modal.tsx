@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
+
 interface ConfirmModalProps {
   open: boolean;
   title: string;
   description: string;
   onCancel: () => void;
-  onConfirm: () => void;
+  onConfirm: () => Promise<void> | void;
 }
 
 export default function ConfirmModal({
@@ -15,7 +17,19 @@ export default function ConfirmModal({
   onCancel,
   onConfirm,
 }: ConfirmModalProps) {
+  const [loading, setLoading] = useState(false);
+
   if (!open) return null;
+
+  const handleConfirm = async () => {
+    try {
+      setLoading(true);
+      await onConfirm();
+      onCancel();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
@@ -34,7 +48,6 @@ export default function ConfirmModal({
             className="
             rounded-sm
             border border-slate-700
-
             px-4 py-2
             "
           >
@@ -42,16 +55,17 @@ export default function ConfirmModal({
           </button>
 
           <button
-            onClick={onConfirm}
+            onClick={handleConfirm}
+            disabled={loading}
             className="
             rounded-sm
             bg-red-600
-
             px-4 py-2
             text-white
+            disabled:opacity-60
             "
           >
-            Confirm
+            {loading ? "Working..." : "Confirm"}
           </button>
         </div>
       </div>

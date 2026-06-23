@@ -191,26 +191,18 @@ export default function ServicesPage() {
   const matchesFilter = (status: string) => {
     if (filter === "All") return true;
 
-    return (
-      status.toLowerCase() ===
-      filter.toLowerCase()
-    );
+    return status.toLowerCase() === filter.toLowerCase();
   };
 
   const filterServices = (services: any[]) =>
     services.filter((service) => {
-      const searchMatch =
-        service.name
-          .toLowerCase()
-          .includes(search.toLowerCase());
+      const searchMatch = service.name
+        .toLowerCase()
+        .includes(search.toLowerCase());
 
-      const statusMatch =
-        matchesFilter(service.status);
+      const statusMatch = matchesFilter(service.status);
 
-      return (
-        searchMatch &&
-        statusMatch
-      );
+      return searchMatch && statusMatch;
     });
 
   const totalResults =
@@ -222,20 +214,14 @@ export default function ServicesPage() {
 
   return (
     <div className="p-6">
-      <ServicesToolbar
-        search={search}
-        onSearch={setSearch}
-      />
+      <ServicesToolbar search={search} onSearch={setSearch} />
 
       <div className="mb-6 flex gap-8 text-sm text-slate-500">
         <span>{totalResults} endpoints</span>
         <span>5 categories</span>
       </div>
 
-      <ServiceFilters
-        selected={filter}
-        onSelect={setFilter}
-      />
+      <ServiceFilters selected={filter} onSelect={setFilter} />
 
       {totalResults === 0 ? (
         <EmptyState />

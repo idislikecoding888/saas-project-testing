@@ -11,18 +11,20 @@ interface ApiKeyCardProps {
   name: string;
   keyValue: string;
   createdAt: string;
-  onDelete?: () => void;
+  active?: boolean;
+  onDelete: () => void;
   onCopy?: () => void;
-  onRotate?: () => void;
+  onRotate: () => void;
 }
 
 export default function ApiKeyCard({
   name,
   keyValue,
   createdAt,
+  active = false,  
   onDelete,
   onCopy,
-  onRotate,     
+  onRotate, 
 }: ApiKeyCardProps) {
     const [visible, setVisible] =
   useState(false);
@@ -45,6 +47,17 @@ export default function ApiKeyCard({
   <h3 className="text-lg font-semibold text-white">
     {name}
   </h3>
+  <div className="mt-2">
+  <span
+    className={`px-3 py-1 rounded-full text-xs ${
+      active
+        ? "bg-green-500/10 text-green-400 border border-green-500/20"
+        : "bg-slate-500/10 text-slate-400 border border-slate-500/20"
+    }`}
+  >
+    {active ? "ACTIVE" : "REVOKED"}
+  </span>
+</div>
 
   <div className="mt-3 space-y-1 text-sm text-slate-400">
     <p>

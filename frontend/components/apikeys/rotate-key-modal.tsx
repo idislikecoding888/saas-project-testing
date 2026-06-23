@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
 interface RotateKeyModalProps {
   open: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => Promise<void> | void;
 }
 
 export default function RotateKeyModal({
@@ -11,7 +13,19 @@ export default function RotateKeyModal({
   onClose,
   onConfirm,
 }: RotateKeyModalProps) {
+  const [loading, setLoading] = useState(false);
+
   if (!open) return null;
+
+  const handleConfirm = async () => {
+    try {
+      setLoading(true);
+      await onConfirm();
+      onClose();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -69,16 +83,18 @@ export default function RotateKeyModal({
           </button>
 
           <button
-            onClick={onConfirm}
+            onClick={handleConfirm}
+            disabled={loading}
             className="
             rounded-sm
             bg-blue-600
             px-4 py-2
             text-white
             hover:bg-blue-500
+            disabled:opacity-60
             "
           >
-            Rotate Key
+            {loading ? "Rotating..." : "Rotate Key"}
           </button>
         </div>
       </div>

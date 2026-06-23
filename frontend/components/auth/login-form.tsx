@@ -58,8 +58,10 @@ export default function LoginForm() {
     setError("");
 
     try {
-      const { user } = await login(email, password);
-      router.replace(routeByRole(user.role));
+      const result = await login(email, password);
+
+      router.replace(routeByRole(result.user?.role || "developer"));
+      return;
     } catch (err: any) {
       console.error(err);
       setError(
@@ -167,12 +169,33 @@ export default function LoginForm() {
       </button>
 
       <div className="text-center">
-        <button
-          type="button"
-          className="text-sm text-slate-500 hover:text-slate-300"
-        >
-          Need access? Contact administrator
-        </button>
+        <div className="text-center space-y-3">
+
+  <button
+    type="button"
+    className="
+    text-sm
+    text-slate-500
+    hover:text-slate-300
+    "
+  >
+    Need access? Contact administrator
+  </button>
+
+  <div>
+    <a
+      href="/register"
+      className="
+      text-sm
+      text-blue-400
+      hover:text-blue-300
+      "
+    >
+      New user? Register here
+    </a>
+  </div>
+
+</div>
       </div>
     </form>
   );

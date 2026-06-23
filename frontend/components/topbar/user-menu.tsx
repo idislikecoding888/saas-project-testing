@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import api from "@/lib/api/axios";
 import { logout, getRole, type UserRole } from "@/lib/auth/auth";
 import { Wallet, ChevronDown } from "lucide-react";
 import Link from "next/link";
@@ -20,9 +21,38 @@ function settingsPath(role: UserRole | null) {
 export default function UserMenu() {
   const [open, setOpen] = useState(false);
   const [role, setRole] = useState<UserRole | null>(null);
+  const [walletBalance, setWalletBalance] = useState<number | null>(null);
 
   useEffect(() => {
     setRole(getRole());
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadWallet = async () => {
+      try {
+        const meResponse = await api.get("/users/me");
+        const me = meResponse.data as { id: string };
+
+        const walletResponse = await api.get(`/wallet/${me.id}`);
+        const balance = walletResponse.data?.balance ?? 0;
+
+        if (!cancelled) {
+          setWalletBalance(balance);
+        }
+      } catch {
+        if (!cancelled) {
+          setWalletBalance(null);
+        }
+      }
+    };
+
+    void loadWallet();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleLogout = () => {
@@ -35,7 +65,11 @@ export default function UserMenu() {
       {role === "developer" && (
         <button className="flex items-center gap-2 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 transition-all hover:bg-[var(--hover-surface)]">
           <Wallet size={16} />
-          <span className="text-sm font-medium">₹12,450</span>
+          <span className="text-sm font-medium">
+            {walletBalance === null
+              ? "Loading..."
+              : `₹${new Intl.NumberFormat("en-IN").format(walletBalance)}`}
+          </span>
         </button>
       )}
 

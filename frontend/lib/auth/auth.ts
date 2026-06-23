@@ -8,18 +8,31 @@ export const USER_KEY = "idproofpro_user";
 
 export type UserRole = "admin" | "staff" | "developer";
 
+type BackendRole = "SUPER_ADMIN" | "STAFF" | "CUSTOMER" | string;
+
 export type AuthUser = {
   id: string;
   email: string;
   firstName: string | null;
   lastName: string | null;
   role: UserRole;
-  createdAt: string;
+  createdAt?: string;
 };
+
+function normalizeRole(role?: BackendRole | null): UserRole {
+  switch ((role ?? "").toUpperCase()) {
+    case "SUPER_ADMIN":
+    case "ADMIN":
+      return "admin";
+    case "STAFF":
+      return "staff";
+    default:
+      return "developer";
+  }
+}
 
 function setCookie(name: string, value: string, days = 7) {
   if (typeof document === "undefined") return;
-
   const expires = new Date(
     Date.now() + days * 24 * 60 * 60 * 1000
   ).toUTCString();
@@ -31,25 +44,28 @@ function setCookie(name: string, value: string, days = 7) {
 
 function deleteCookie(name: string) {
   if (typeof document === "undefined") return;
-
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax`;
 }
 
-export function setSession(token: string, user?: AuthUser) {
+export function setSession(token: string, user?: Partial<AuthUser> & { role?: string }) {
   if (typeof window === "undefined") return;
 
-  localStorage.setItem(TOKEN_KEY, token);
+  const role = normalizeRole(user?.role);
 
-  if (user?.role) {
-    localStorage.setItem(ROLE_KEY, user.role);
-    setCookie("role", user.role);
-  }
+  localStorage.setItem(TOKEN_KEY, token);
+  localStorage.setItem(ROLE_KEY, role);
+  setCookie("token", token);
+  setCookie("role", role);
 
   if (user) {
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    localStorage.setItem(
+      USER_KEY,
+      JSON.stringify({
+        ...user,
+        role,
+      })
+    );
   }
-
-  setCookie("token", token);
 }
 
 export function clearSession() {
@@ -96,14 +112,28 @@ export async function login(email: string, password: string) {
     password,
   });
 
-  const token = response.data?.access_token;
+  const token = response.data?.access_token || response.data?.token;
 
   if (!token) {
     throw new Error("Login failed: token not returned");
   }
 
+  setSession(token, { role: "developer" });
+
   const profileResponse = await api.get("/users/me");
-  const user = profileResponse.data as AuthUser;
+  const backendUser = profileResponse.data as {
+    id: string;
+    email: string;
+    firstName: string | null;
+    lastName: string | null;
+    role: BackendRole;
+    createdAt?: string;
+  };
+
+  const user: AuthUser = {
+    ...backendUser,
+    role: normalizeRole(backendUser.role),
+  };
 
   setSession(token, user);
 
@@ -117,13 +147,26 @@ export async function hydrateSession() {
   const token = getToken();
   if (!token) return null;
 
-  const user = getStoredUser();
-  if (user) return user;
+  const storedUser = getStoredUser();
+  if (storedUser) return storedUser;
 
   const response = await api.get("/users/me");
-  const freshUser = response.data as AuthUser;
-  setSession(token, freshUser);
-  return freshUser;
+  const backendUser = response.data as {
+    id: string;
+    email: string;
+    firstName: string | null;
+    lastName: string | null;
+    role: BackendRole;
+    createdAt?: string;
+  };
+
+  const user: AuthUser = {
+    ...backendUser,
+    role: normalizeRole(backendUser.role),
+  };
+
+  setSession(token, user);
+  return user;
 }
 
 export function logout() {
